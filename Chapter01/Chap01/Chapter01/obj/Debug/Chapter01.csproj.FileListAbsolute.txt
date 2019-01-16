@@ -1,0 +1,7 @@
+D:\GitHub\Advance_Graphics\Chapter01\Chap01\Chapter01\bin\TypeScriptHTMLApp1.dll.config
+D:\GitHub\Advance_Graphics\Chapter01\Chap01\Chapter01\bin\TypeScriptHTMLApp1.dll
+D:\GitHub\Advance_Graphics\Chapter01\Chap01\Chapter01\bin\TypeScriptHTMLApp1.pdb
+D:\GitHub\Advance_Graphics\Chapter01\Chap01\Chapter01\obj\Debug\Chapter01.csprojAssemblyReference.cache
+D:\GitHub\Advance_Graphics\Chapter01\Chap01\Chapter01\obj\Debug\Chapter01.csproj.CoreCompileInputs.cache
+D:\GitHub\Advance_Graphics\Chapter01\Chap01\Chapter01\obj\Debug\TypeScriptHTMLApp1.dll
+D:\GitHub\Advance_Graphics\Chapter01\Chap01\Chapter01\obj\Debug\TypeScriptHTMLApp1.pdb
