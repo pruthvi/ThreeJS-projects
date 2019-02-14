@@ -76,7 +76,7 @@ function init(){
 }
 
 function setupCameraAndLight(){
-    camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 10000);
+    camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 75000);
     camera.position.set(2000,500,2000);
     camera.lookAt(scene.position);
 
@@ -96,7 +96,32 @@ function createGeometry(){
 
 
 
-/*
+
+    sun = new THREE.Object3D();
+    sun.position.set(0,0,0);
+    addObject(sun, "star", 1391, 0xFFE22E, 0, 0);
+
+    mercury = new THREE.Object3D();
+    mercury.position.set(0,0,0);
+    addObject(mercury, "planet", 4.8, 0xFF4A2E, 57.9, 0);
+
+    venus = new THREE.Object3D();
+    venus.position.set(0,0,0);
+    addObject(venus, "planet", 12.1, 0xFF4A2E, 108.2, 0);
+
+    earth = new THREE.Object3D();
+    earth.position.set(0,0,0);
+    addObject(earth, "planet", 12.7, 0x2E69FF, 149.6, 0);
+
+    mars = new THREE.Object3D();
+    mars.position.set(0,0,0);
+    addObject(mars, "planet", 6.7, 0x2E69FF, 227.9, 0);
+
+    jupiter = new THREE.Object3D();
+    jupiter.position.set(0,0,0);
+    addObject(jupiter, "planet", 142, 0x2E69FF, 778.6/2, 0);
+
+    /*
  planet     diameter    distance    orbit period
 
  SUN        1,391,980
@@ -110,29 +135,71 @@ function createGeometry(){
  NEPTUNE 	49,528	    4495.1	    59,800
  PLUTO 	    2370	    5906.4	    90,560
 
-
-
 */
+    saturn = new THREE.Object3D();
+    saturn.position.set(0,0,0);
+    addObject(saturn, "planet", 120, 0x2E69FF, 1433.5/2, 0);
 
-    sun = new THREE.Object3D();
-    sun.position.set(0,0,0);
-    addObject(sun, "star", 139, 0xFFE22E, 0, 0);
+    urnaus = new THREE.Object3D();
+    urnaus.position.set(0,0,0);
+    addObject(urnaus, "planet", 51.1, 0x2E69FF, 2872.5/2, 0);
 
-    mercury = new THREE.Object3D();
-    mercury.position.set(0,0,0);
-    addObject(mercury, "planet", 4.8, 0xFF4A2E, 57.9,0);
+    neptune = new THREE.Object3D();
+    neptune.position.set(0,0,0);
+    addObject(neptune, "planet", 49.5, 0x2E69FF, 4495.1/2, 0);
 
-    earth = new THREE.Object3D();
-    earth.position.set(0,0,0);
-    addObject(earth, "planet", 12.7, 0x2E69FF, 149.6,0);
+    pluto = new THREE.Object3D();
+    pluto.position.set(0,0,0);
+    addObject(pluto, "planet", 2.3, 0x2E69FF, 5906.4/2, 0);
+
 
     earthMoon = new THREE.Object3D();
-    earthMoon.position.set(1496,0,0);
+    earthMoon.position.set(149.6*25,0,0);
     addObject(earthMoon, "moon", 2, 0xFF4A2E, 5, 0);
     earth.add(earthMoon);
 
+    jupMoon1 = new THREE.Object3D();
+    jupMoon1.position.set(778.6*12.5,0,0);
+    addObject(jupMoon1, "moon", 2, 0xFF4A2E, 10, 0);
+    jupiter.add(jupMoon1);
+
+    jupMoon2 = new THREE.Object3D();
+    jupMoon2.position.set(778.6*12.5,0,0);
+    addObject(jupMoon2, "moon", 2, 0xFF4A2E, 10, 45);
+    jupiter.add(jupMoon2);
+
+    jupMoon3 = new THREE.Object3D();
+    jupMoon3.position.set(778.6*12.5,0,0);
+    addObject(jupMoon3, "moon", 2, 0xFF4A2E, 10, 90);
+    jupiter.add(jupMoon3);
+
+    jupMoon4 = new THREE.Object3D();
+    jupMoon4.position.set(778.6*12.5,0,0);
+    addObject(jupMoon4, "moon", 2, 0xFF4A2E, 10, 120);
+    jupiter.add(jupMoon4);
+
+    jupMoon5 = new THREE.Object3D();
+    jupMoon5.position.set(778.6*12.5,0,0);
+    addObject(jupMoon5, "moon", 2, 0xFF4A2E, 10, 150);
+    jupiter.add(jupMoon5);
+
+    satMoon1 = new THREE.Object3D();
+    satMoon1.position.set(1433.5*12.5,0,0);
+    addObject(satMoon1, "moon", 1, 0xFF4A2E, 6, 45);
+    saturn.add(satMoon1);
+
+    satMoon2 = new THREE.Object3D();
+    satMoon2.position.set(1433.5*12.5,0,0);
+    addObject(satMoon2, "moon", 1, 0xFF4A2E, 6, 220);
+    saturn.add(satMoon2);
+        
+    satMoon3 = new THREE.Object3D();
+    satMoon3.position.set(1433.5*12.5,0,0);
+    addObject(satMoon3, "moon", 1, 0xFF4A2E, 6, 120);
+    saturn.add(satMoon3);
+
     moon1 = new THREE.Object3D();
-    moon1.position.set(1496,0,0);
+    moon1.position.set(149.6*25,0,0);
     addObject(moon1, "moon", 1, 0xFF4A2E, 6, 45);
     earth.add(moon1);
 
@@ -141,9 +208,7 @@ function createGeometry(){
 
 function addObject(container, obj, size, myColor, x, angle){
 
-    //    container.rotation.y = angle;
-
-        x = x * 10;
+        x = x * 25;
         let geom = new THREE.SphereGeometry(size,32,32);
         let mat = new THREE.MeshLambertMaterial({color: myColor});
         let sphere = new THREE.Mesh(geom, mat);
@@ -216,18 +281,18 @@ function orbit(){
     sun.rotation.y = 0;
 
     mercury.rotation.y += mercurySpeed * (0.01 / 0.88);
- //   venus.rotation.y += venusSpeed * (0.01 / 3.65);
+    venus.rotation.y += venusSpeed * (0.01 / 2.24);
     earth.rotation.y += earthSpeed * (0.01 / 3.65);
-/*    mars.rotation.y += marsSpeed * (0.01 / 6.87);
+   mars.rotation.y += marsSpeed * (0.01 / 6.87);
     jupiter.rotation.y += jupiterSpeed * (0.01 / 43.31);
     saturn.rotation.y += saturnSpeed * (0.01 / 100.74);
     urnaus.rotation.y += urnausSpeed * (0.01 / 305.89);
     neptune.rotation.y += neptuneSpeed * (0.01 / 598.00);
     pluto.rotation.y += plutoSpeed * (0.01 / 905.60);
-*/
+
 
     earthMoon.rotation.z += 0.01 * earthMoonSpeed;
-/*
+
     satMoon1.rotation.z += 0.01 * satMoon1Speed;
     satMoon2.rotation.z += 0.01 * satMoon2Speed;
     satMoon3.rotation.z += 0.01 * satMoon3Speed;
@@ -238,7 +303,7 @@ function orbit(){
     jupMoon4.rotation.z += 0.01 * jupMoon4Speed;
     jupMoon5.rotation.z += 0.01 * jupMoon5Speed;
 
-*/
+
     moon1.rotation.z +=  0.01 * moon1Speed;
 
 }
