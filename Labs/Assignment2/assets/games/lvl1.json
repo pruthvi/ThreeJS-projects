@@ -1,0 +1,44 @@
+{"setting":{
+  "box_number": "number",
+  "x": "number",
+  "y": "number",
+  "z": "number",
+  "size": "number",
+  "color": "string"
+},
+"info":
+[{
+  "box_number": "1",
+  "x": "0",
+  "y": "5",
+  "z": "0",
+  "size": "2",
+  "color": "0xFFFFFF"
+},
+{
+  "box_number": "2",
+  "x": "5",
+  "y": "5",
+  "z": "0",
+  "size": "2",
+  "color": "0x394dce"
+}
+,
+{
+  "box_number": "3",
+  "x": "1.5",
+  "y": "10",
+  "z": "0",
+  "size": "2",
+  "color": "0x394dce"
+},
+{
+  "box_number": "4",
+  "x": "2.5",
+  "y": "5",
+  "z": "0",
+  "size": "2",
+  "color": "0x394dce"
+}
+
+]}
