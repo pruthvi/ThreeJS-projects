@@ -10,12 +10,13 @@ var rotateScene, speed = 0.01;
 
 var objects = [];
 
-
+var score = 100;
+var text;
 var axle = new THREE.Object3D();
 
 Physijs.scripts.worker = 'libs/physijs_worker.js';
 Physijs.scripts.ammo = 'libs/ammo.js';
-
+var stats;
 
 function init() {
 
@@ -26,19 +27,22 @@ function init() {
 
 
     scene.setGravity(new THREE.Vector3(0, -50, 0)); //specify gravity
+    stats = new Stats();
+    stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+    //document.body.appendChild(stats.dom);
 
 
     rotateScene = false;
 
     document.body.appendChild(renderer.domElement);
     orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-    readFile(5500, "lvl1");
+    readFile(5500, "lvl4");
 
 }
 
 function setupCameraAndLight() {
 
-    camera.position.set(0, 5, 20);
+    camera.position.set(0, 10, 30);
     camera.lookAt(scene.position);
     scene.add(new THREE.AmbientLight(0x666666));
 
@@ -57,6 +61,21 @@ function createGeometry() {
 
     scene.add(new THREE.AxesHelper(10));
 
+    text = document.createElement('div');
+    text.style.position = 'absolute';
+    text.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
+    text.style.width = 100;
+    text.style.height = 100;
+    text.style.backgroundColor = "white";
+    text.style.color = "red";
+    text.style.fontSize = "20px";
+    text.style.top = 50 + 'px';
+    text.style.left = 50 + 'px';
+
+    document.body.appendChild(text);
+
+
+
     // load a texture, set wrap mode to repeat
     var texture = new THREE.TextureLoader().load("assets/textures/wood.jpg");
     texture.wrapS = THREE.RepeatWrapping;
@@ -69,7 +88,7 @@ function createGeometry() {
         new THREE.MeshBasicMaterial({ color: 0xeeeeee, map: texture })
         , 0);
     floor.position.set(0, 0, 0);
-    scene.add(floor);
+      scene.add(floor);
 
 
 
@@ -86,11 +105,95 @@ function createGeometry() {
     let block = new Physijs.BoxMesh(blockGeom, blockMat);
     block.position.set(0, 10, 0);
     block.castShadow = true;
-  //  scene.add(block);
+    //  scene.add(block);
+
+    /* Level 1 */
+    //size, color, x,y,z
+    // createBox(2, 0x394dce, 0, 5, 0);
+    // createBox(2, 0xd11d47, 2.5, 5, 0);
+    // createBox(2, 0xd11d47, 5, 5, 0);
+    // createBox(2, 0xd11d47, 1.3, 10, 0);
+    // createBox(2, 0xd11d47, 3.8, 10, 0);
+    // createBox(2, 0xd11d47, 2.5, 15, 0);
+
+    // /* Level 2 */
+    // createBox(2, 0x394dce, 0, 5, 1.5);
+    // createBox(2, 0xd11d47, -1.8, 5, -1.5);
+    // createBox(2, 0xd11d47, 1.8, 5, -1.5);
+    // createBox(2, 0x394dce, 1.3, 10, 0);
+    // createBox(2, 0x394dce, -1.3, 10, 0);
+    // createBox(2, 0xd11d47, 0, 15, 0);
+
+    // /* Level 3 */
+    // let floor1 = new Physijs.BoxMesh(
+    //     new THREE.CubeGeometry(20, 1, 1.75),
+    //     new THREE.MeshBasicMaterial({ color: 0xeeeeee, map: texture })
+    //     , 0);
+    // floor1.position.set(0, 0, 0);
+    // scene.add(floor1);
+    // createBox(2, 0x394dce, 0, 5, 0); //L1
+    // createBox(2, 0xd11d47, -2.5, 5, 0);
+    // createBox(2, 0xd11d47, 2.5, 5, 0);
+    // createBox(2, 0xd11d47, -5, 5, 0);
+    // createBox(2, 0xd11d47, 5, 5, 0);
+    // createBox(2, 0xd11d47, -7.5, 5, 0);
+    // createBox(2, 0xd11d47, 7.5, 5, 0);
+    // createBox(2, 0x394dce, 1.6, 10, 0); //L2
+    // createBox(2, 0x394dce, -1.6, 10, 0);
+    // createBox(2, 0x394dce, 4, 10, 0);
+    // createBox(2, 0x394dce, -4, 10, 0);
+    // createBox(2, 0x394dce, 6.6, 10, 0);
+    // createBox(2, 0x394dce, -6.6, 10, 0);
+    // createBox(2, 0xd11d47, 0, 15, 0);  //L3
+    // createBox(2, 0xd11d47, 2.5, 15, 0);
+    // createBox(2, 0xd11d47, -2.5, 15, 0);
+    // createBox(2, 0xd11d47, 5, 15, 0);
+    // createBox(2, 0xd11d47, -5, 15, 0);
+    // createBox(2, 0xd11d47, 1.3, 20, 0);    //L4
+    // createBox(2, 0xd11d47, -1.3, 20, 0);
+    // createBox(2, 0xd11d47, 0, 25, 0);
 
 
-  //  createBox(2, 0x394dce, 1, 10, 2);
- //   createBox(1, 0xd11d47, 1, 20, 2);
+
+    // /* Level 4 */
+    // let floor1 = new Physijs.BoxMesh(
+    //     new THREE.CubeGeometry(20, 1, 2),
+    //     new THREE.MeshBasicMaterial({ color: 0xeeeeee, map: texture })
+    //     , 0);
+    // floor1.position.set(0, 0, 0);
+    // floor1.rotation.y = 90;
+    // scene.add(floor1);
+    // let floor2 = new Physijs.BoxMesh(
+    //     new THREE.CubeGeometry(20, 1, 2),
+    //     new THREE.MeshBasicMaterial({ color: 0xeeeeee, map: texture })
+    //     , 0);
+    // floor2.position.set(0, 0, 0);
+    // scene.add(floor2);
+
+    // createBox(2, 0x394dce, 0, 5, 0);
+    // createBox(2, 0xd11d47, -1.8, 5, 0);
+    // createBox(2, 0xd11d47, 1.8, 5, 0);
+    // createBox(2, 0x394dce, 1.3, 10, 0);
+    // createBox(2, 0x394dce, -1.3, 10, 0);
+    // createBox(2, 0xd11d47, 0, 15, 0);
+
+    // createBox(2, 0xd11d47, 1.5, 5, 2.5); //Forward
+    // createBox(2, 0xd11d47, 2.5, 5, 5);
+    // createBox(2, 0xd11d47, 3.5, 5, 7.5);
+    // createBox(2, 0xd11d47, 2, 10, 3.75);
+    // createBox(2, 0xd11d47, 3, 10, 6.25);
+    // createBox(2, 0xd11d47, 2.5, 15, 5);
+
+    // createBox(2, 0xd11d47, -1.5, 5, -2.5); // Backward
+    // createBox(2, 0xd11d47, -2.5, 5, -5);
+    // createBox(2, 0xd11d47, -3.5, 5, -7.5);
+    // createBox(2, 0xd11d47, -2, 10, -3.75);
+    // createBox(2, 0xd11d47, -3, 10, -6.25);
+    // createBox(2, 0xd11d47, -2.5, 15, -5);
+
+    // rotateScene = true;
+    speed = 0.015;
+
 
 
 }
@@ -99,10 +202,12 @@ function createGeometry() {
 function createBox(size, boxColor, x, y, z) {
 
     let boxGeometry = new THREE.BoxGeometry(size, size, size);
-    let boxMaterial = new THREE.MeshLambertMaterial({ color: boxColor });
-
+   // let boxMaterial = new THREE.MeshLambertMaterial({ color: boxColor });
+    var boxMaterial = Physijs.createMaterial(
+        new THREE.MeshBasicMaterial({ color: boxColor }),
+        0.5, 0);
     let box = new Physijs.BoxMesh(boxGeometry, boxMaterial);
-
+ 
     box.position.set(x, y, z);
     box.castShadow = true;
     box.receiveShadow = true;
@@ -130,23 +235,23 @@ function readFile(port, filename) {
     }
 }
 
-function createGame(data){
-    console.log(data.setting.color); 
+function createGame(data) {
+    console.log(data.setting.color);
     console.log(data);
     var count = Object.keys(data.info).length;
     console.log(count);
 
-    console.log(data.info[1].size); 
+    console.log(data.info[1].size);
 
-    for(i=0;i<count;i++){
+    for (i = 0; i < count; i++) {
 
         var iSize = data.info[i].size;
-        var iColor =  parseInt(data.info[i].color, 16);
+        var iColor = parseInt(data.info[i].color, 16);
         var iX = data.info[i].x;
         var iY = data.info[i].y;
         var iZ = data.info[i].z;
-        createBox(iSize, iColor, iX, iY, iZ) ;
-    } 
+             createBox(iSize, iColor, iX, iY, iZ) ;
+    }
 
 }
 
@@ -161,7 +266,7 @@ function setupDatGui() {
 
 }
 
-function mouseDownHandler(event){
+function mouseDownHandler(event) {
 
     let pos = new THREE.Vector3(
         (event.clientX / window.innerWidth) * 2 - 1,
@@ -172,20 +277,51 @@ function mouseDownHandler(event){
     let vector = pos.unproject(camera);
     let raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
     let intersects = raycaster.intersectObjects(objects);
-    intersects.forEach((obj) => scene.remove(obj.object));
+    intersects.forEach((obj) => {
+        scene.remove(obj.object);
+        score = score + 10;
+        console.log("score : " + score);
+
+    });
+
+    objects.forEach(obj => {
+        obj.__dirtyPosition = true;
+        obj.__dirtyRotation = true;
+
+    });
 
 }
 
 
+function checkLocation() {
+
+
+    text.innerHTML = "Score : " + score;
+
+    for (let i = 0; i < objects.length; i++) {
+        if (objects[i].position.y <= -10) {
+            scene.remove(objects[i]);
+            objects.splice(i,1);
+            score = score - 10;
+        }
+    }
+  
+}
 
 function render() {
+
+    stats.update();
+    checkLocation();
 
     scene.simulate();
 
     orbitControls.update();
 
     if (rotateScene == true) {
+        scene.rotation.z += speed;
+        scene.rotation.x += speed;
         scene.rotation.y += speed;
+
     }
 
     renderer.render(scene, camera);
@@ -200,7 +336,7 @@ window.onload = () => {
     setupCameraAndLight();
     createGeometry();
     setupDatGui();
-    window.addEventListener('mousedown', mouseDownHandler,false);
+    window.addEventListener('mousedown', mouseDownHandler, false);
 
     render();
 
