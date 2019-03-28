@@ -123,139 +123,12 @@ function createGeometry() {
     floor.position.set(0, 0, 0);
      scene.add(floor);
 
-
-
-
-
-
-    var blockGeom = new THREE.BoxGeometry(1, 0.2, 1);
-    let blockMat = Physijs.createMaterial(new THREE.MeshStandardMaterial({
-        color: 0xff7777, transparent: true, opacity: 0.9
-    }),
-        0.3,       //friction
-        0.7); //restitution 
-
-    let block = new Physijs.BoxMesh(blockGeom, blockMat);
-    block.position.set(0, 10, 0);
-    block.castShadow = true;
-    //  scene.add(block);
-
-    /* Level 1 */
-    //size, color, x,y,z
-    // createBox(2, 0x394dce, 0, 5, 0);
-    // createBox(2, 0xd11d47, 2.5, 5, 0);
-    // createBox(2, 0xd11d47, -2.5, 5, 0);
-    // createBox(2, 0xd11d47, 1.3, 10, 0);
-    // createBox(2, 0xd11d47, -1.3, 10, 0);
-    // createBox(2, 0xd11d47, 0, 15, 0);
-
-    // /* Level 2 */
-    // createBox(2, 0x394dce, 0, 5, 1.5);
-    // createBox(2, 0xd11d47, -1.8, 5, -1.5);
-    // createBox(2, 0xd11d47, 1.8, 5, -1.5);
-    // createBox(2, 0x394dce, 1.3, 10, 0);
-    // createBox(2, 0x394dce, -1.3, 10, 0);
-    // createBox(2, 0xd11d47, 0, 15, 0);
-
-    // /* Level 3 */
-    // let floor1 = new Physijs.BoxMesh(
-    //     new THREE.CubeGeometry(20, 1, 1.75),
-    //     new THREE.MeshBasicMaterial({ color: 0xeeeeee, map: texture })
-    //     , 0);
-    // floor1.position.set(0, 0, 0);
-    // scene.add(floor1);
-    // createBox(2, 0x394dce, 0, 5, 0); //L1
-    // createBox(2, 0xd11d47, -2.5, 5, 0);
-    // createBox(2, 0xd11d47, 2.5, 5, 0);
-    // createBox(2, 0xd11d47, -5, 5, 0);
-    // createBox(2, 0xd11d47, 5, 5, 0);
-    // createBox(2, 0xd11d47, -7.5, 5, 0);
-    // createBox(2, 0xd11d47, 7.5, 5, 0);
-    // createBox(2, 0x394dce, 1.6, 10, 0); //L2
-    // createBox(2, 0x394dce, -1.6, 10, 0);
-    // createBox(2, 0x394dce, 4, 10, 0);
-    // createBox(2, 0x394dce, -4, 10, 0);
-    // createBox(2, 0x394dce, 6.6, 10, 0);
-    // createBox(2, 0x394dce, -6.6, 10, 0);
-    // createBox(2, 0xd11d47, 0, 15, 0);  //L3
-    // createBox(2, 0xd11d47, 2.5, 15, 0);
-    // createBox(2, 0xd11d47, -2.5, 15, 0);
-    // createBox(2, 0xd11d47, 5, 15, 0);
-    // createBox(2, 0xd11d47, -5, 15, 0);
-    // createBox(2, 0xd11d47, 1.3, 20, 0);    //L4
-    // createBox(2, 0xd11d47, -1.3, 20, 0);
-    // createBox(2, 0xd11d47, 0, 25, 0);
-
-
-
-    // /* Level 4 */
-    // let floor1 = new Physijs.BoxMesh(
-    //     new THREE.CubeGeometry(20, 1, 2),
-    //     new THREE.MeshBasicMaterial({ color: 0xeeeeee, map: texture })
-    //     , 0);
-    // floor1.position.set(0, 0, 0);
-    // floor1.rotation.y = 90;
-    // scene.add(floor1);
-    // let floor2 = new Physijs.BoxMesh(
-    //     new THREE.CubeGeometry(20, 1, 2),
-    //     new THREE.MeshBasicMaterial({ color: 0xeeeeee, map: texture })
-    //     , 0);
-    // floor2.position.set(0, 0, 0);
-    // scene.add(floor2);
-
-    // createBox(2, 0x394dce, 0, 5, 0);
-    // createBox(2, 0xd11d47, -2.5, 5, 0);
-    // createBox(2, 0xd11d47, 2.5, 5, 0);
-    // createBox(2, 0x394dce, 1.3, 10, 0);
-    // createBox(2, 0x394dce, -1.3, 10, 0);
-    // createBox(2, 0xd11d47, 0, 15, 0);
-
-    // createBox(2, 0xd11d47, 1.5, 5, 2.5); //Forward
-    // createBox(2, 0xd11d47, 2.5, 5, 5);
-    // createBox(2, 0xd11d47, 3.5, 5, 7.5);
-    // createBox(2, 0xd11d47, 2, 10, 3.75);
-    // createBox(2, 0xd11d47, 3, 10, 6.25);
-    // createBox(2, 0xd11d47, 2.5, 15, 5);
-
-    // createBox(2, 0xd11d47, -1.5, 5, -2.5); // Backward
-    // createBox(2, 0xd11d47, -2.5, 5, -5);
-    // createBox(2, 0xd11d47, -3.5, 5, -7.5);
-    // createBox(2, 0xd11d47, -2, 10, -3.75);
-    // createBox(2, 0xd11d47, -3, 10, -6.25);
-    // createBox(2, 0xd11d47, -2.5, 15, -5);
-
-    // /* Level 5 */
-    // createBox(3, 0xd11d47, -8.75, 5, 0);
-    // createBox(3, 0xd11d47, -5, 5, 0);
-    // createBox(5, 0xd11d47, -6.5, 10, 0);
-
-    // createBox(3, 0xd11d47, 8.75, 5, 0);
-    // createBox(3, 0xd11d47, 5, 5, 0);
-    // createBox(5, 0xd11d47, 6.5, 10, 0);
-
-
-    // createBox(2, 0xd11d47, 5, 5, 0);
-    // createBox(2, 0xd11d47, 7.5, 5, 0);
-    // createBox(2, 0xd11d47, 3.25, 10, 0);
-    // createBox(2, 0xd11d47, 6.25, 10, 0);
-    // createBox(2, 0xd11d47, 5, 15, 0);
-
-    // rotateScene = true;
-    // speedX = 0.02;
-    // speedY = 0.02;
-    // speedZ = 0.02;
-
-
-
-
-
 }
 
 
 function createBox(size, boxColor, x, y, z) {
 
     let boxGeometry = new THREE.BoxGeometry(size, size, size);
-    // let boxMaterial = new THREE.MeshLambertMaterial({ color: boxColor });
     var boxMaterial = Physijs.createMaterial(
         new THREE.MeshStandardMaterial({ color: boxColor }),
         0.5, 0);
@@ -275,9 +148,9 @@ function readFile(port, filename) {
         '/assets/games/' + //url path
         filename + //file name from dat.gui
         '.json'; //extension
-    //console.log(url); //debugging code
+    let onlineurl = '/assets/games/' +  filename + '.json';
     let request = new XMLHttpRequest();
-    request.open('GET', url);
+    request.open('GET', onlineurl);
     request.responseType = 'text'; //try text if this doesn’t work
     request.send();
     request.onload = () => {
