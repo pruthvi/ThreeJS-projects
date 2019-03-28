@@ -148,7 +148,7 @@ function readFile(port, filename) {
         '/assets/games/' + //url path
         filename + //file name from dat.gui
         '.json'; //extension
-    let onlineurl = '../assets/games/' +  filename + '.json';
+    let onlineurl = '/assets/games/' +  filename + '.json';
     let request = new XMLHttpRequest();
     // console.log("URL : " + onlineurl);
     request.open('GET', onlineurl);
