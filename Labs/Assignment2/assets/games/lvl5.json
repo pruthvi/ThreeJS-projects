@@ -2,9 +2,9 @@
   "box_number": "number",
  "size": "number",
   "color": "string",
-  "rotation_x": "0.015",
-  "rotation_y": "0",
-  "rotation_z": "0.015"
+  "rotation_x": "0.02",
+  "rotation_y": "0.02",
+  "rotation_z": "0.02"
 },
 "info":
 [
@@ -19,7 +19,7 @@
   {
     "box_number": 2,
     "size": 2,
-    "color": "0xd11d47",
+    "color": "31c668",
     "x": -1.8,
     "y": 5,
     "z": 0
@@ -27,7 +27,7 @@
   {
     "box_number": 3,
     "size": 2,
-    "color": "0xd11d47",
+    "color": "31c668",
     "x": 1.8,
     "y": 5,
     "z": 0
@@ -51,7 +51,7 @@
   {
     "box_number": 6,
     "size": 2,
-    "color": "d8cc27",
+    "color": "0x000000",
     "x": 0,
     "y": 15,
     "z": 0
@@ -75,7 +75,7 @@
   {
     "box_number": 9,
     "size": 2,
-    "color": "31c668",
+    "color": "0xd11d47",
     "x": 3.5,
     "y": 5,
     "z": 7.5
@@ -99,7 +99,7 @@
   {
     "box_number": 12,
     "size": 2,
-    "color": "31c668",
+    "color": "0xd11d47",
     "x": 2.5,
     "y": 15,
     "z": 5
@@ -123,7 +123,7 @@
   {
     "box_number": 15,
     "size": 2,
-    "color": "31c668",
+    "color": "0xd11d47",
     "x": -3.5,
     "y": 5,
     "z": -7.5
@@ -147,9 +147,57 @@
   {
     "box_number": 18,
     "size": 2,
-    "color": "31c668",
+    "color": "0xd11d47",
     "x": -2.5,
     "y": 15,
     "z": -5
+  },
+  {
+    "box_number": 19,
+    "size": 3,
+    "color": "0xd11d47",
+    "x": -8.75,
+    "y": 5,
+    "z": 0
+  },
+  {
+    "box_number": 20,
+    "size": 3,
+    "color": "0xd11d47",
+    "x": -5,
+    "y": 5,
+    "z": 0
+  },
+  {
+    "box_number": 21,
+    "size": 5,
+    "color": "d8cc27",
+    "x": -6.5,
+    "y": 10,
+    "z": 0
+  },
+  {
+    "box_number": 22,
+    "size": 3,
+    "color": "0xd11d47",
+    "x": 8.75,
+    "y": 5,
+    "z": 0
+  },
+  {
+    "box_number": 23,
+    "size": 3,
+    "color": "0xd11d47",
+    "x": 5,
+    "y": 5,
+    "z": 0
+  },
+  {
+    "box_number": 24,
+    "size": 5,
+    "color": "d8cc27",
+    "x": 6.5,
+    "y": 10,
+    "z": 0
   }
 ]}

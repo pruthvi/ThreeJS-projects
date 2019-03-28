@@ -2,16 +2,16 @@
   "box_number": "number",
  "size": "number",
   "color": "string",
-  "x": "number",
-  "y": "number",
-  "z": "number"
+  "rotation_x": "0",
+  "rotation_y": "0.01",
+  "rotation_z": "0"
 },
 "info":
 [
   {
     "box_number": 1,
     "size": 2,
-    "color": "0x394dce",
+    "color": "0xd11d47",
     "x": 0,
     "y": 5,
     "z": 1.5
@@ -51,7 +51,7 @@
   {
     "box_number": 6,
     "size": 2,
-    "color": "0xd11d47",
+    "color": "31c668",
     "x": 0,
     "y": 15,
     "z": 0
