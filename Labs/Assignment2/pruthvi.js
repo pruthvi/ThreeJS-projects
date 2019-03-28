@@ -150,6 +150,7 @@ function readFile(port, filename) {
         '.json'; //extension
     let onlineurl = '/assets/games/' +  filename + '.json';
     let request = new XMLHttpRequest();
+    console.log("URL : " + onlineurl);
     request.open('GET', onlineurl);
     request.responseType = 'text'; //try text if this doesn’t work
     request.send();
