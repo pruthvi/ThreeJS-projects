@@ -14,10 +14,10 @@ var axle = new THREE.Object3D();
 
 var texture;
 var objects = [];
-var rotateScene, speedX, speedY, speedZ;
+var rotateScene, speedX, speedY, speedZ, gameLoad;
 
 var score = 0, lostBox = 0;
-var text, instruText, lostText;
+var text, instruText, lostText, resultText;
 
 Physijs.scripts.worker = 'libs/physijs_worker.js';
 Physijs.scripts.ammo = 'libs/ammo.js';
@@ -93,6 +93,20 @@ function createGeometry() {
     lostText.style.left = 50 + 'px';
     document.body.appendChild(lostText);
 
+    // Level Lost Boxes Text
+    resultText = document.createElement('div');
+    resultText.style.fontFamily = 'sans-serif';
+    resultText.style.textAlign = 'center';
+    resultText.style.position = 'fixed';
+    resultText.style.width = 100;
+    resultText.style.height = 100;
+    resultText.style.backgroundColor = "White";
+    resultText.style.color = "red";
+    resultText.style.fontSize = "48px";
+    resultText.style.top = (window.innerHeight - 100) / 2 + 'px';
+    resultText.style.left = (window.innerWidth - 100) / 2 + 'px';
+    document.body.appendChild(resultText);
+
     // Instruction Text
     instruText = document.createElement('div');
     instruText.style.fontFamily = 'sans-serif';
@@ -119,7 +133,7 @@ function createGeometry() {
         , 0);
     floor.position.set(0, 0, 0);
     scene.add(floor);
-
+    gameLoad = false;
 }
 
 
@@ -200,18 +214,18 @@ function createFloor(z, angle) {
 
 function readFile(port, filename) {
 
- //   let url = 'http://127.0.0.1:' + // Change link to localhost if required
-//        port + '/assets/games/' + filename + '.json';
-     let onlineurl = 'https://pruthvi.github.io/Advance_Graphics/Labs/Assignment2/assets/games/' +  filename + '.json'; /* Online Link */
+    //   let url = 'http://127.0.0.1:' + // Change link to localhost if required
+    //        port + '/assets/games/' + filename + '.json';
+    let onlineurl = 'https://pruthvi.github.io/Advance_Graphics/Labs/Assignment2/assets/games/' + filename + '.json'; /* Online Link */
     let request = new XMLHttpRequest();
     request.open('GET', onlineurl);
-   // request.open('GET', url);
+    // request.open('GET', url);
 
     request.responseType = 'text';
     request.send();
     request.onload = () => {
         let data = request.responseText;
-       //   createGame(data);               // for online link
+        //   createGame(data);               // for online link
         createGame(JSON.parse(data));
     }
 }
@@ -231,6 +245,7 @@ function createGame(data) {
         var iZ = data.info[i].z;
         createBox(iSize, iColor, iX, iY, iZ);
     }
+    gameLoad = true;
 }
 
 function createBox(size, boxColor, x, y, z) {
@@ -255,20 +270,13 @@ function mouseDownHandler(event) {
     let vector = pos.unproject(camera);
     let raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
     let intersects = raycaster.intersectObjects(objects);
-    console.log("Intersects : " + intersects);
-    console.log("Length : " + intersects.length);
     if (intersects.length > 0) {
         var firstElement = intersects[0].object;
-        console.log("Remove : " + firstElement);
         scene.remove(firstElement);
+        objects.splice(objects.lastIndexOf(firstElement), 1);
+        score = score + 10;
     }
 
-
-
-    // intersects.forEach((obj) => {
-    //     scene.remove(obj.object);
-    //     score = score + 10;
-    // });
     objects.forEach(obj => {
         obj.__dirtyPosition = true;
         obj.__dirtyRotation = true;
@@ -276,7 +284,7 @@ function mouseDownHandler(event) {
 
 }
 
-function checkLocation() {
+function constantUpdate() {
 
     text.innerHTML = " &nbsp;&nbsp;Score : " + score + "&nbsp;&nbsp;";          // Checks score on each frame
     lostText.innerHTML = "Level <br />  &nbsp;&nbsp;Lost Boxes : " + lostBox + "&nbsp;&nbsp;";  // Checks lost box on each frame
@@ -289,6 +297,32 @@ function checkLocation() {
             score = score - 10;
         }
     }
+
+    if (gameLoad) {     // checks win and lose condition if game is loaded
+        resultText.innerHTML ="";
+        if (objects.length == 0) {
+            console.log("YOU WON!");
+            resultText.innerHTML = " &nbsp;&nbsp; You WON! &nbsp;&nbsp;";  // display Win condion
+            speedX = 0;   // stops Rotation
+            speedY = 0;
+            speedZ = 0;
+            gameLoad = false;
+        } else{
+            resultText.innerHTML ="";
+        }
+
+        if (score < 0) {
+            console.log("YOU LOST!");
+            resultText.innerHTML = " &nbsp;&nbsp; You LOST! &nbsp;&nbsp;";
+            instruText.innerHTML = " You can not play another level. <br /> Refresh the page to Restart!";
+            speedX = 0;
+            speedY = 0;
+            speedZ = 0;
+            gameLoad = false;
+        }
+        
+    }
+   
 }
 
 function render() {
@@ -299,7 +333,7 @@ function render() {
         scene.rotation.z += speedZ;
     }
 
-    checkLocation();    // check movement of box and update stat
+    constantUpdate();    // check movement of box and update stat
 
     // stats.update();       // For updating stats and fps
     scene.simulate();
