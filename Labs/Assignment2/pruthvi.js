@@ -200,17 +200,19 @@ function createFloor(z, angle) {
 
 function readFile(port, filename) {
 
-    let url = 'http://127.0.0.1:' + // Change link to localhost if required
-        port + '/assets/games/' + filename + '.json';
-    // let onlineurl = 'https://pruthvi.github.io/Advance_Graphics/Labs/Assignment2/assets/games/' +  filename + '.json'; /* Online Link */
+ //   let url = 'http://127.0.0.1:' + // Change link to localhost if required
+//        port + '/assets/games/' + filename + '.json';
+     let onlineurl = 'https://pruthvi.github.io/Advance_Graphics/Labs/Assignment2/assets/games/' +  filename + '.json'; /* Online Link */
     let request = new XMLHttpRequest();
-    request.open('GET', url);
+    request.open('GET', onlineurl);
+   // request.open('GET', url);
+
     request.responseType = 'text';
     request.send();
     request.onload = () => {
         let data = request.responseText;
-        //  createGame(data);               // for online link
-        createGame(JSON.parse(data));
+          createGame(data);               // for online link
+        // createGame(JSON.parse(data));
     }
 }
 
