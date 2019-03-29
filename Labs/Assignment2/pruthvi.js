@@ -211,8 +211,8 @@ function readFile(port, filename) {
     request.send();
     request.onload = () => {
         let data = request.responseText;
-          createGame(data);               // for online link
-        // createGame(JSON.parse(data));
+       //   createGame(data);               // for online link
+        createGame(JSON.parse(data));
     }
 }
 
