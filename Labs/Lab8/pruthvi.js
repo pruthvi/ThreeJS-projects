@@ -2,108 +2,32 @@
     Copyright Pruthvi // pruthv.com 
 */
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-const scene = new THREE.Scene();
+var renderer = new THREE.WebGLRenderer({ antialias: true });
+var scene = new THREE.Scene();
+var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1.0, 1000);
 
-
-//const scene = new Physijs.Scene({ reportsize: 50, fixedTimeStep: 1 / 60 });
-const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1.0, 1000);
-
-var orbitControls, controls;
-
+var orbitControls, controls, clock;
 var ambientLight, dirLight;
-
-var axle = new THREE.Object3D();
 
 var texture, elf;
 
-var bloom, composer;
-var params = {
-    exposure: 1,
-    bloomStrength: 1.5,
-    bloomThreshold: 0,
-    bloomRadius: 0
-};
-var rotateScene;
+var bloom, composer, bloomComposer;
+var gammaCorrectionShader;
+var renderedScene;
+var bloomPass, renderPass, effectCopy, renderScene;
 
-var stats;
 
 function init() {
+
+    clock = new THREE.Clock();
 
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x004400);
     renderer.shadowMap.enabled = true;
 
-    var clock = new THREE.Clock();
-
-    stats = new Stats();
-    stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-    //document.body.appendChild(stats.dom);
-
-    rotateScene = true;
-
     document.body.appendChild(renderer.domElement);
     orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-
-
-    var urls = ['posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'posz.jpg', 'negz.jpg'];
-    var loader = new THREE.CubeTextureLoader().setPath('textures/cube/');
-    loader.load(urls, function (texture) {
-        var pmremGenerator = new THREE.PMREMGenerator(texture);
-        pmremGenerator.update(renderer);
-        var pmremCubeUVPacker = new THREE.PMREMCubeUVPacker(pmremGenerator.cubeLods);
-        pmremCubeUVPacker.update(renderer);
-        var envMap = pmremCubeUVPacker.CubeUVRenderTarget.texture;
-
-        pmremGenerator.dispose();
-        pmremCubeUVPacker.dispose();
-        scene.background = texture;
-    });
-
-       
-    // loading manager
-    var loadingManager = new THREE.LoadingManager( function () {
-        scene.add( elf );
-    } );
-
-    // collada
-    var loader = new THREE.ColladaLoader( loadingManager );
-    loader.load( './model/elf.dae', function ( collada ) {
-        elf = collada.scene;
-    } );
-
-    var renderScene = new THREE.RenderPass( scene, camera );
-
-    // var bloomPass = new THREE.BloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
-    // bloomPass.threshold = params.bloomThreshold;
-    // bloomPass.strength = params.bloomStrength;
-    // bloomPass.radius = params.bloomRadius;
-
-    // composer = new THREE.EffectComposer( renderer );
-    // composer.setSize( window.innerWidth, window.innerHeight );
-    // composer.addPass( renderScene );
-    // composer.addPass( bloomPass );
-
-    var webgl = new THREE.WebGLRenderer();    
-
-    //webgl.gammaInput = true;
-
-//     var renderScene = new THREE.RenderPass(scene, camera);
-    
-//     var bloomPass = new THREE.BloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
-//    // bloomPass = new THREE.BloomPass(2,3, 0.2, 0.3);
-//    bloomPass.threshold = params.bloomThreshold;
-//    bloomPass.strength = params.bloomStrength;
-//    bloomPass.radius = params.bloomRadius;
-
-//    var renderPass = new THREE.RenderPass();
-//     composer = new THREE.EffectComposer( renderScene );
-//    composer.setSize( window.innerWidth, window.innerHeight );
-//    composer.addPass( renderPass );
-//    composer.addPass( bloomPass );
-// //     bloom = new THREE.BloomPass();
-//      scene.add(bloomPass);
 }
 
 function setupCameraAndLight() {
@@ -112,68 +36,118 @@ function setupCameraAndLight() {
     camera.lookAt(scene.position);
     scene.add(new THREE.AmbientLight(0x666666));
 
-    ambientLight = new THREE.AmbientLight(0xFFFFFF);
-    ambientLight.position.set(0, 0, 0);
-    scene.add(ambientLight);
-
-    dirLight = new THREE.DirectionalLight(0xFFFFFF);
-    dirLight.position.set(3, 10, 3);
-    dirLight.castShadow = true;
-    scene.add(dirLight);
+    var spotLight = new THREE.DirectionalLight(0xffffff);
+    spotLight.position.set(3, 10, 3);
+    spotLight.intensity = 0.6;
+    scene.add(spotLight);
 
 }
 
 function createGeometry() {
 
-   // scene.add(new THREE.AxesHelper(10));
+    /* Skybox */
+    var urls = ['posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'posz.jpg', 'negz.jpg'];
+    var loader = new THREE.CubeTextureLoader().setPath('textures/cube/');
+    loader.load(urls, function (texture) {
+        var pmremGenerator = new THREE.PMREMGenerator(texture);
+        pmremGenerator.update(renderer);
+        var pmremCubeUVPacker = new THREE.PMREMCubeUVPacker(pmremGenerator.cubeLods);
+        pmremCubeUVPacker.update(renderer);
+        pmremGenerator.dispose();
+        pmremCubeUVPacker.dispose();
+        scene.background = texture;
+    });
+
+    /* Collada Model */
+    var loadingManager = new THREE.LoadingManager(function () {     // loading manager
+        scene.add(elf);
+    });
+    var loader = new THREE.ColladaLoader(loadingManager);
+    loader.load('./model/elf.dae', function (collada) {
+        elf = collada.scene;
+    });
 
 
+    renderPass = new THREE.RenderPass(scene, camera);
+    effectCopy = new THREE.ShaderPass(THREE.CopyShader);
+    effectCopy.renderToScreen = true;
+    bloomPass = new THREE.BloomPass(3, 25, 5.0, 256);
+    gammaCorrectionShader = new THREE.ShaderPass(THREE.GammaCorrectionShader);
 
+    composer = new THREE.EffectComposer(renderer);
+    composer.addPass(renderPass);
+    composer.addPass(effectCopy);
+    composer.addPass(gammaCorrectionShader);
 
+    renderScene = new THREE.TexturePass(composer.renderTarget2);
+    bloomComposer = new THREE.EffectComposer(renderer);
+    bloomComposer.addPass(renderScene);
+    bloomComposer.addPass(bloomPass);
+    bloomComposer.addPass(effectCopy);
 }
-
-window.onresize = function () {
-
-    var width = window.innerWidth;
-    var height = window.innerHeight;
-
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize( width, height );
-    composer.setSize( width, height );
-
-};
 
 
 function setupDatGui() {
 
-    controls = new function () {
+    var controls = new function () {
 
-        this.lvl1 = function () {
-
+        // bloompass
+        this.strength = 3;
+        this.kernelSize = 25;
+        this.sigma = 5.0;
+        this.resolution = 256;
+        this.updateEffectBloom = function () {
+            bloomPass = new THREE.BloomPass(controls.strength, controls.kernelSize, controls.sigma, controls.resolution);
+            bloomComposer = new THREE.EffectComposer(renderer);
+            bloomComposer.addPass(renderScene);
+            bloomComposer.addPass(bloomPass);
+            bloomComposer.addPass(effectCopy);
         };
 
-    }
+       // this.gamma = true;
+    };
 
     let gui = new dat.GUI();
-    gui.add(controls, 'lvl1').name('Level 1');
+
+    var bpFolder = gui.addFolder("BloomPass");
+    bpFolder.add(controls, "strength", 1, 10).onChange(controls.updateEffectBloom);
+    bpFolder.add(controls, "kernelSize", 1, 100).onChange(controls.updateEffectBloom);
+    bpFolder.add(controls, "sigma", 1, 10).onChange(controls.updateEffectBloom);
+    bpFolder.add(controls, "resolution", 0, 1024).onChange(controls.updateEffectBloom);
+    // addBloomPassControls(gui, controls, bloomPass, function(updated) {bloomComposer.passes[1] = updated;});
+
+
+    addShaderControl(gui, "GammaCorrection", gammaCorrectionShader, {});
+
+    // var gcFolder = gui.addFolder("Gamma");
+    // gcFolder.add(controls, "gamma").name("Enable")
+    //     .onChange((e) => {
+    //         if (e) {
+    //             gammaCorrectionShader.enabled = true;
+    //             console.log("True");
+    //         }
+    //         else {
+    //             gammaCorrectionShader.enabled = false;
+    //             console.log("false");
+    //         }
+    //     });
 
 
 }
 
-
 function render() {
 
-    //composer.render();
+    var delta = clock.getDelta();
+    orbitControls.update(delta);
 
-			//	const delta = clock.getDelta();
-//composer.render(delta);
-    // stats.update();       // For updating stats and fps
-    orbitControls.update();
-    renderer.castShadow = true;
-    renderer.render(scene, camera);
+    renderer.autoClear = false;
+    renderer.clear();
+
+    composer.render(delta);
+    bloomComposer.render(delta);
+
     requestAnimationFrame(render);
+
 }
 
 window.onload = () => {
