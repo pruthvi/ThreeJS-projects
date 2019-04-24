@@ -1,149 +1,196 @@
 ﻿var Shaders = {};
 
-Shaders.BasicShader = {
-
-    name: 'BasicShader',
-
-    uniforms: {},
-
-    vertexShader: [
-
-        'void main(){',
-
-        'gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);',
-
-        '}'
-
-        ].join( '\n' ),
-
-    fragmentShader: [
-
-        'void main(){',
-
-        'gl_FragColor = vec4(1.0, 0, 0, 0.5);',
-
-        '}'
-
-    ].join( '\n' )
-
-
-};
-
-
 Shaders.BasicShader1 = {
 
     name: 'BasicShader1',
-    
+
     uniforms: {
-        'time':{type: 'f', value: 0}
+        'texture': { value: null }
     },
 
     vertexShader: [
+        `
+        varying vec2 vUv;
+        void main(){
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+        
+        `
 
-        'uniform float time;',
-
-        'void main(){',
-
-        'gl_Position = projectionMatrix * modelViewMatrix * vec4(position * abs(sin(time * 5.0)), 1.0);',
-
-        '}'
-
-        ].join( '\n' ),
+    ].join('\n'),
 
     fragmentShader: [
 
-        'uniform float time;',
+        `
+       varying vec2 vUv;
+       uniform sampler2D texture;
 
-        'void main(){',
+       void main()
+       {
+            vec4 color = texture2D(texture, vUv);
 
-        'gl_FragColor = vec4(abs(sin(time)), abs(sin(time*3.0)), 0, 0.5);',
+            gl_FragColor = vec4(color);
+       }
+    
+       `
 
-        '}'
+    ].join('\n')
 
-    ].join( '\n' )
 
 };
+
 
 Shaders.BasicShader2 = {
 
     name: 'BasicShader2',
-    
+
     uniforms: {
-        'time':{type: 'f', value: 0}
+
+        'texture': { value: null },
+        'alphatexture': { value: null }
+
     },
 
     vertexShader: [
 
-        'uniform float time;',
+        `
+        varying vec2 vUv;
+        void main(){
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
 
-        'void main(){',
+        `
 
-        'gl_Position = projectionMatrix * modelViewMatrix * vec4(position * abs(sin(time * 5.0)), 1.0);',
-
-        '}'
-
-        ].join( '\n' ),
+    ].join('\n'),
 
     fragmentShader: [
 
-        'uniform float time;',
-        'vec3 colora = vec3(0.062, 0.384, 0.91);',
-        'vec3 colorb = vec3(0.909, 0.062, 0.062);',
+        `
+        uniform float time;
+        uniform sampler2D texture;
+        uniform sampler2D alphatexture;
 
+        varying vec2 vUv;
 
-        'void main(){',
-        'vec3 color = mix(colora, colorb, abs(sin(time)));',
+        void main(void)
+        {
+            vec3 color;
+            vec4 cA = texture2D(alphatexture, vUv);
+            vec4 cT = texture2D(texture, vUv);
+            color = cA.rgb * cA.a + cT.rgb * cT.a * (1.0 - cA.a); 
+            gl_FragColor= vec4(color, 1.0);
+        }
 
-        'gl_FragColor = vec4(color, 1.0);',
+        `
 
-        '}'
-
-    ].join( '\n' )
+    ].join('\n')
 
 };
+
 Shaders.BasicShader3 = {
 
     name: 'BasicShader3',
-    
-    uniforms: {
-        'time':{type: 'f', value: 0},
 
-        'texture':{value: null}
+    uniforms: {
+        'time': { type: 'f', value: 0 },
+
+        'texture': { value: null },
+        'alphatexture': { value: null }
 
     },
 
     vertexShader: [
 
-        'varying vec2 vUv;',
+        `
+        varying vec2 vUv;
+        void main(){
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
 
-        'void main(){',
+        `
 
-        'vUv = uv;',
-
-        'gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);',
-
-        '}'
-
-        ].join( '\n' ),
+    ].join('\n'),
 
     fragmentShader: [
 
-        'varying vec2 vUv;',
+        `
+        uniform float time;
+        uniform sampler2D texture;
+        uniform sampler2D alphatexture;
 
-        'uniform sampler2D texture;',
+        varying vec2 vUv;
+
+        void main(void)
+        {
+            vec3 color;
+           // vUv = vec2(vUv.x + sin(time), vUv.y);
+            vec4 cA = texture2D(alphatexture, vUv) * sin(time);
+            vec4 cT = texture2D(texture, vUv);
+            color = cA.rgb * cA.a + cT.rgb * cT.a * (1.0 - cA.a); 
+            gl_FragColor= vec4(color, 1.0);
+        }
 
 
-        'vec3 colora = vec3(0.062, 0.384, 0.91);',
-        'vec3 colorb = vec3(0.909, 0.062, 0.062);',
+        `
 
+    ].join('\n')
 
-        'void main(){',
-        'vec4 color = texture2D(texture, vUv);',
+};
 
-        'gl_FragColor = vec4(color);',
+Shaders.BasicShader4 = {
 
-        '}'
+    name: 'BasicShader4',
 
-    ].join( '\n' )
+    uniforms: {
+        'time': { type: 'f', value: 0 },
+
+        'texture': { value: null },
+
+        'alphatexture': { value: null }
+
+    },
+
+    vertexShader: [
+
+        `
+        uniform float time;
+
+        varying vec2 vUv;
+        void main(){
+        vUv = uv;
+        vec3 pos = position;
+       // pos.z+= 4.0 * sin(time) * sin(pos.x + time) * sin(pos.y);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+
+        `
+
+    ].join('\n'),
+
+    fragmentShader: [
+
+        `
+        uniform float time;
+        uniform sampler2D texture;
+        uniform sampler2D alphatexture;
+
+        varying vec2 vUv;
+
+        void main(void)
+        {
+            vec3 color;
+           // vUv = vec2(vUv.x + sin(time), vUv.y);
+            vec4 cA = texture2D(alphatexture, vUv);
+            vec4 cT = texture2D(texture, vUv);
+            color = cA.rgb * cA.a + cT.rgb * cT.a * (1.0 - cA.a); 
+            gl_FragColor= vec4(color, 1.0);
+        }
+
+        `
+
+    ].join('\n')
 
 };
